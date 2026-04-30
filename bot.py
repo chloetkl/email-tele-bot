@@ -286,7 +286,6 @@ def build_app() -> Application:
         await app.bot.send_message(chat_id=telegram_user_id, text=f"Login failed: {message}")
 
     oauth = OAuthServer(
-        port=config.OAUTH_PORT,
         redirect_base=config.OAUTH_REDIRECT_BASE,
         client_secrets_file=config.GOOGLE_CLIENT_SECRETS_FILE,
         on_success=on_oauth_success,

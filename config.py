@@ -23,5 +23,9 @@ LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
 # Google OAuth / Gmail API
 GOOGLE_CLIENT_SECRETS_FILE: str = os.getenv("GOOGLE_CLIENT_SECRETS_FILE", "client_secret.json")
-OAUTH_PORT: int = int(os.getenv("OAUTH_PORT", "8085"))
-OAUTH_REDIRECT_BASE: str = os.getenv("OAUTH_REDIRECT_BASE", f"http://localhost:{OAUTH_PORT}")
+OAUTH_REDIRECT_BASE: str = os.getenv("OAUTH_REDIRECT_BASE", "http://localhost:8085")
+
+# Web server (Cloud Run)
+PORT: int = int(os.getenv("PORT", "8080"))
+BASE_URL: str = os.getenv("BASE_URL", "")  # e.g. https://<cloud-run-service-url>
+TELEGRAM_WEBHOOK_PATH: str = os.getenv("TELEGRAM_WEBHOOK_PATH", "/telegram/webhook")
