@@ -1,0 +1,36 @@
+### OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+### Env / secrets
+.env
+.env.*
+!.env.example
+client_secret*.json
+
+### Logs
+*.log
+logs/
+
+### Python (if used)
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+### Node (if used)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+build/
+
+### Misc
+tmp/
