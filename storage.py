@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
+import time
 from dataclasses import dataclass
 from typing import Optional
 
@@ -32,6 +33,16 @@ class CredentialStore:
                     telegram_user_id INTEGER PRIMARY KEY,
                     gmail_address TEXT NOT NULL,
                     refresh_token_enc BLOB NOT NULL
+                )
+                """
+            )
+            con.execute(
+                """
+                CREATE TABLE IF NOT EXISTS recipient_history (
+                    telegram_user_id INTEGER NOT NULL,
+                    email TEXT NOT NULL,
+                    last_used INTEGER NOT NULL,
+                    PRIMARY KEY (telegram_user_id, email)
                 )
                 """
             )
@@ -69,3 +80,29 @@ class CredentialStore:
     def delete_gmail_oauth_credentials(self, *, telegram_user_id: int) -> None:
         with self._connect() as con:
             con.execute("DELETE FROM gmail_oauth_credentials WHERE telegram_user_id=?", (telegram_user_id,))
+
+    def list_recipient_history(self, *, telegram_user_id: int, limit: int = 10) -> list[str]:
+        with self._connect() as con:
+            rows = con.execute(
+                """
+                SELECT email FROM recipient_history
+                WHERE telegram_user_id=?
+                ORDER BY last_used DESC
+                LIMIT ?
+                """,
+                (telegram_user_id, limit),
+            ).fetchall()
+        return [r[0] for r in rows]
+
+    def touch_recipient(self, *, telegram_user_id: int, email: str) -> None:
+        now = int(time.time())
+        email = email.strip().lower()
+        with self._connect() as con:
+            con.execute(
+                """
+                INSERT INTO recipient_history (telegram_user_id, email, last_used)
+                VALUES (?, ?, ?)
+                ON CONFLICT(telegram_user_id, email) DO UPDATE SET last_used=excluded.last_used
+                """,
+                (telegram_user_id, email, now),
+            )

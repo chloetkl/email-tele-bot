@@ -4,10 +4,11 @@ Telegram bot that forwards files and images sent in Telegram to an email address
 
 ## Commands
 
-- **`/login`**: authenticate the sender Gmail account using **Google OAuth2** (one-time browser consent).
-- **`/forward`**: asks for destination email (validated by regex), subject (optional), body (optional), then accepts documents/photos (including forwarded messages) and sends them as email attachments.
-- **`/done`**: (during `/forward`) send the email.
-- **`/cancel`**: cancel the current flow.
+- **`/login`**: Gmail OAuth (when needed or session expired).
+- **Stage files**: send one or more documents/photos in DM; bot replies with count.
+- **`/forward`**: pick recipient (recent list by number or new email), subject/body, then **`/send`**.
+- **`/clear`**: drop staged files.
+- **`/cancel`**: cancel compose.
 
 ## Prerequisites
 
@@ -116,7 +117,7 @@ Redeploy once after updating `cloudrun.env`.
 curl https://<service-url>/healthz
 ```
 
-Then test in Telegram: `/login` then `/forward`.
+Then test in Telegram: `/login`, stage files, `/forward`, `/send`.
 
 ## Notes
 
@@ -142,7 +143,7 @@ Then test in Telegram: `/login` then `/forward`.
 
 ## Code structure
 
-- `bot.py`: Telegram command flow and bot handlers (`/login`, `/forward`, `/done`, `/cancel`).
+- `bot.py`: Telegram handlers (`/login`, staging, `/forward`, `/send`, `/clear`, `/cancel`).
 - `server.py`: Cloud Run HTTP entrypoint (webhook endpoint + OAuth callback route + health check).
 - `oauth_server.py`: Google OAuth URL generation and callback/token exchange logic.
 - `email_client.py`: Gmail API send logic (build MIME message + send via Gmail API).
@@ -161,7 +162,7 @@ Then test in Telegram: `/login` then `/forward`.
 
 ## Improvements
 
-- Save previously used recipient emails per user and show a quick-select list in `/forward`.
+- Recipient history is stored in sqlite; improvements could add inline keyboards or merge forwarded albums.
 - Customize message replies at each stage for users.
 - Clean up directory structure to follow better practices for bot development.
 

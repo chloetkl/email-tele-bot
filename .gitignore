@@ -10,6 +10,12 @@
 client_secret*.json
 cloudrun.env
 
+### Database
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+
 ### Logs
 *.log
 logs/

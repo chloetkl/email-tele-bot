@@ -36,6 +36,10 @@ class GmailApiClient:
         creds.refresh(Request())
         return creds
 
+    def verify_refresh_token(self, *, refresh_token: str) -> None:
+        """Raises if refresh token is invalid or revoked."""
+        self._creds(refresh_token=refresh_token)
+
     def send_email(
         self,
         *,
