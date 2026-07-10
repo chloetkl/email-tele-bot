@@ -114,7 +114,7 @@ Redeploy once after updating `cloudrun.env`.
 ### 6) Verify
 
 ```bash
-curl https://<service-url>/healthz
+curl https://<service-url>/status
 ```
 
 Then test in Telegram: `/login`, stage files, `/forward`, `/send`.

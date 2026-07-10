@@ -35,7 +35,7 @@ async def create_web_app() -> web.Application:
     app = web.Application()
     app.add_routes(
         [
-            web.get("/healthz", health),
+            web.get("/status", health),
             web.get("/oauth2/callback", oauth.handle_callback),
             web.post(webhook_path, telegram_webhook),
         ]
